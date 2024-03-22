@@ -54,6 +54,12 @@ pipeline {
                 }	
             }
         }
+	stage('Install Tomcat 9') {
+            steps {
+                sh 'sudo apt install -y tomcat9 tomcat9-admin tomcat9-examples'
+            }
+        }
+    
         stage("Build & Push Docker Image") {
             steps {
                 script {
