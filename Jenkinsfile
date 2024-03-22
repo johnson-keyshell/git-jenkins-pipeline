@@ -54,6 +54,39 @@ pipeline {
                 }	
             }
         }
+	 stage('Install Tomcat 9') {
+            steps {
+                sh 'sudo apt install -y tomcat9 tomcat9-admin tomcat9-examples'
+            }
+        }
+        
+        stage('Set Tomcat directory ownership') {
+            steps {
+                sh 'sudo chown -R tomcat:tomcat /var/lib/tomcat9/'
+            }
+        }
+        
+        stage('Make Tomcat script executable') {
+            steps {
+                sh 'sudo chmod +x /var/lib/tomcat9'
+            }
+        }
+        
+        stage('deploy the application') {
+            steps {
+                dir('/home/ubuntu/workspace/register-app-ci')
+                sh 'sudo cp /home/ubuntu/workspace/register-app-ci/webapp/target/webapp.war /var/lib/tomcat9/webapps/'
+            }
+        }
+        
+        stage('Start Tomcat') {
+            steps {
+                sh 'sudo systemctl start tomcat9'
+            }
+        }
+    }
+}
+    
         stage("Build & Push Docker Image") {
             steps {
                 script {
