@@ -69,13 +69,14 @@ pipeline {
                 sh 'sudo chmod +x /var/lib/tomcat9'
             }
         }
-	stage('deploy the application') {
-            steps {
-                dir('/home/ubuntu/workspace/register-app-ci')
-                
-                sh 'sudo cp /home/ubuntu/workspace/register-app-ci/webapp/target/webapp.war /var/lib/tomcat9/webapps/'
-            }
+	stage('Deploy the application') {
+    steps {
+        dir('/home/ubuntu/workspace/register-app-ci') {
+            sh 'sudo cp webapp/target/webapp.war /var/lib/tomcat9/webapps/'
         }
+    }
+}
+
         stage('Start Tomcat') {
             steps {
                 sh 'sudo systemctl start tomcat9'
